@@ -1,10 +1,22 @@
 <script lang="ts">
+	import { invoke } from "@tauri-apps/api";
+
 	export let name: string;
+	let messagePromise = invoke("hello_command", { name });
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#await messagePromise}
+		<h1>Loading.invoke.</h1>
+	{:then message}
+		<h1>{message}</h1>
+	{:catch err}
+		<h1>{err}</h1>
+	{/await}
+	<p>
+		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
+		how to build Svelte apps.
+	</p>
 </main>
 
 <style>
